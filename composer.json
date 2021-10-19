@@ -1,0 +1,19 @@
+{
+    "name": "edcastanha/sales-api",
+    "description": "API para consulta de grava\u0000\u0000o de transa\u0000\u0000es de vendas",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Edson Bezerra",
+            "email": "edcastanha@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "app"
+        }
+    },
+    
+    "require": {}
+}
