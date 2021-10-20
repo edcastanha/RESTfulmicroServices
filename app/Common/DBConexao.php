@@ -7,10 +7,10 @@ use \PDOException;
 
 class DBConexao
 {
-    private $DB_HOST = "localhost";
-    private $DB_NAME = "db_api";
-    private $DB_USER = "root";
-    private $DB_PASS = "";
+    private $DB_HOST = getenv('DB_HOST');
+    private $DB_NAME = getenv('DB_NAME');
+    private $DB_USER = getenv('DB_USER');
+    private $DB_PASS = getenv('DB_PASS');
 
     private $table = "";
     public function __construct($table = null){
@@ -48,8 +48,6 @@ class DBConexao
     
       /**
        * Método responsável por inserir dados no banco
-       * @param  array $values [ field => value ]
-       * @return integer ID inserido
        */
       public function insert($values){
         //DADOS DA QUERY
@@ -68,13 +66,9 @@ class DBConexao
     
       /**
        * Método responsável por executar uma consulta no banco
-       * @param  string $where
-       * @param  string $order
-       * @param  string $limit
-       * @param  string $fields
-       * @return PDOStatement
        */
-      public function select($where = null, $order = null, $limit = null, $fields = '*'){
+ 
+       public function select($where = null, $order = null, $limit = null, $fields = '*'){
         //DADOS DA QUERY
         $where = strlen($where) ? 'WHERE '.$where : '';
         $order = strlen($order) ? 'ORDER BY '.$order : '';
@@ -89,9 +83,6 @@ class DBConexao
     
       /**
        * Método responsável por executar atualizações no banco de dados
-       * @param  string $where
-       * @param  array $values [ field => value ]
-       * @return boolean
        */
       public function update($where,$values){
         //DADOS DA QUERY
