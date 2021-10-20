@@ -1,16 +1,14 @@
 <?php
-require __DIR__ .'/vendor/autoload.php';
+require __DIR__ .'/__includes/app.php';
 
 use \App\Http\Router;
 use \App\Http\Response;
 use \App\Controllers\Page\Auth;
 
-define('BASE_URL', 'http://apirest');
 
+define('URL', getenv('BASE_URL'));
 
-
-
-$obRoutes = new Router(BASE_URL);
+$obRoutes = new Router(URL);
 
 $obRoutes->get('/',[ 
     function(){
