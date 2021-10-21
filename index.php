@@ -2,22 +2,20 @@
 require __DIR__ .'/__includes/app.php';
 
 use \App\Http\Router;
-use \App\Http\Response;
-use \App\Controllers\Page\Auth;
+use \App\Common\Db\DBConection;
 
+//Definição de rotas
+$objRoutes = new Router(URL);
+$objDBConn = new DBConection();
 
-define('URL', getenv('BASE_URL'));
+include __DIR__ .'/routes/page.php';
 
-$obRoutes = new Router(URL);
+//$objDBConn->select('tb_clientes');
 
-$obRoutes->get('/',[ 
-    function(){
-        return new Response(200, Auth::getAuth(), );
-    }
-]);
 
 /**
  * Returno da requisição ou renderização da página
  */
- $obRoutes->run()
+ $objRoutes->run()
           ->sendResponse();
+

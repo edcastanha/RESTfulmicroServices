@@ -5,6 +5,7 @@ namespace App\Http;
 use \Closure;
 use \Exception;
 use \ReflectionFunction;
+use \App\Http\Middleware\Queue as MiddlewareQueue;
 
 class Router
 {
@@ -15,7 +16,7 @@ class Router
 
     public function __construct($url)
     {
-        $this->request  = new Request();
+        $this->request  = new Request($this);
         $this->url      = $url;
         $this->setPrefix();
     }
@@ -41,12 +42,15 @@ class Router
             }
         }
 
+        $params['middlewares'] = $params['middlewares'] ?? [];
+
         /**
          * Verifica se as variaveis existe
          */
         $params['variables'] = [];
-        $patternVariable = '/[(.*?)]/';
+        $patternVariable = '/{(.*?)}/';
         if(preg_match_all($patternVariable, $route, $matches)){
+            
             $route = preg_replace($patternVariable, '(.*?)', $route);
             $params['variables'] = $matches[1];
         }
@@ -71,28 +75,27 @@ class Router
 
    private function getRoute()
    {
-    
         $uri = $this->getUri();   
         $httpMethod = $this->request->getHttpMethod();
     
         foreach ($this->indexRoutes as $patternRoute=>$methods) {
             // Valida URI
-            if (preg_match($patternRoute, $uri, $matches)) {
+            if(preg_match($patternRoute, $uri, $matches)) {
                 // Validando a permissão do metodo
                 if (isset($methods[$httpMethod])) {
                     unset($matches[0]);
-                    $params = $methods[$httpMethod]['variables'] ?? [];
-                    $$methods[$httpMethod]['variables'] = array_combine($params, $matches);
-                    $$methods[$httpMethod]['variables']['request'] = $this->request;
+
+                    $keys = $methods[$httpMethod]['variables'] ?? [];
+                    $methods[$httpMethod]['variables'] = array_combine($keys, $matches);
+                    $methods[$httpMethod]['variables']['request'] = $this->request;
                     
                     return $methods[$httpMethod];
                 }
-                throw new Exception("Método não permitido", 405);
-                
-            }
 
-            throw new Exception("URL não encontrada", 404);
+                throw new Exception("Método não permitido", 405);   
+            }
         }
+        throw new Exception("URL não encontrada", 404);
     }//getRoute
    
        
@@ -134,11 +137,12 @@ class Router
             $reflection = new ReflectionFunction($route['controllers']);
             //foreach para obter os parametros
             foreach ($reflection->getParameters() as $param) {
-                $name = $$param->getName();
+                $name = $param->getName();
                 $arguments[$name] = $route['variables'][$name] ?? '';
             }
-
-            return call_user_func_array($route['controllers'], [$this->request]);
+            //Retorna FIla de Middlewares
+            return (new MiddlewareQueue($route['middlewares'], $route['controllers'], $arguments))->next($this->request);
+            
 
         } catch (Exception $th) {
             return new Response($th->getCode(), $th->getMessage());

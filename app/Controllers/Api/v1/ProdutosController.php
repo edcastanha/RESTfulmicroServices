@@ -1,7 +1,7 @@
 <?php
 require_once '../vendor/autoload.php';
 
-use App\Config\DBConexao;
+use App\Common\DB\Conexao;
 use App\Models\Produtos;
 
 class ProdutosServices
