@@ -5,7 +5,7 @@ namespace App\Http;
 class Response
 {
     private $headers = [];
-    private $contentType = 'application/json';
+    private $contentType = '';
     private $httpCode = 201;
     private $content = '';
     
@@ -46,10 +46,12 @@ class Response
         $this->sendHeaders();
         
         switch ($this->contentType) {
-            case 'text/html':
-                echo $this->content;
-                exit;
+            
             case 'application/json':
+                echo json_encode($this->content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                exit;
+                
+            case 'text/html':
                 echo $this->content;
                 exit;
              

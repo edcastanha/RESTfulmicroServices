@@ -15,7 +15,7 @@ class Environments
         foreach ($var_lines as $value) {
             putenv(trim($value));
         }
-        
+        // phpinfo(INFO_ENVIRONMENT);
         
     }
 }//class end

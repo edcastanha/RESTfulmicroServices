@@ -8,7 +8,7 @@ $objRoutes = new Router(URL);
 
 
 // Incluindo ROUTES de API - V1
-// include __DIR__ .'/routes/api.php';
+include __DIR__ .'/routes/api.php';
 
 // Inclusão PAGE para cadastro e geração de TOKEN
 include __DIR__ .'/routes/page.php';
