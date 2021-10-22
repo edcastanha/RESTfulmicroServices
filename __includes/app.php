@@ -19,7 +19,12 @@ View::init([
     'URL' => URL
 ]);
 
-MiddlewareQueue::setMap([
+//! Definição para Midddleware Padrões para todas as rotas
+MiddlewareQueue::setDefault([
     'auth' => \App\Http\Middleware\Auth::class
+]);
+
+MiddlewareQueue::setMap([
+    'auth'
 ]);
    

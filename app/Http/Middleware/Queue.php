@@ -15,9 +15,14 @@ class Queue
     private $controllerArgs = [];
     private static $map = [];
 
+    ///Middleware para todas rotas
+    private static $default = [];
+
     public function __construct($middlewares, $controller, $controllerArgs)
     {
-        $this->middlewares = $middlewares;
+
+        $this->middlewares = array_merge(self::$default, $middlewares);
+        // echo '<pre>'; print_r($this->middlewares); echo'</pre>'; exit;
         $this->controller = $controller;
         $this->controllerArgs = $controllerArgs;
     }
@@ -27,6 +32,12 @@ class Queue
         // ! Responsavel por mapear as Middleware
         //! self por se tratatr de uma classe estatica
         self::$map = $map;
+    }
+
+    public static function setDefault($default)
+    { 
+        // ! Responsavel por mapear as Middleware padrões de todas as rotas
+        self::$default = $default;
     }
 
 
@@ -49,11 +60,9 @@ class Queue
         //Proximo middleware, passando a requisição para proxima função
         $queue = $this;
         $next = function($request) use ($queue){
-          return   $queue->next($request);
+            return   $queue->next($request);
         };
         
-        // die(var_dump($next));
-
         //Executando o Middleware
         //PHP retornando exption verificar antes de finalizar.
         return (new self::$map[$middleware])->handle($request, $next);

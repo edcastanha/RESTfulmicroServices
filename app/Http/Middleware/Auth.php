@@ -6,7 +6,6 @@ class Auth{
 
     public function hanble($request, $next)
     {
-
         if(getenv('AUTH_MIDDLEWARE') == 'true'){
            throw new Exception("Sistema em Manutenção", 204);  
         }
