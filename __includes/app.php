@@ -5,10 +5,14 @@ require __DIR__.'/../vendor/autoload.php';
 
 use \App\Utils\View;
 use \App\Http\Middleware\Queue as MiddlewareQueue;
+use \App\Common\Environments;
+use App\Common\Db\DBConection;
 
-\App\Common\Environments::loadenv(__DIR__.'/../');
+Environments::loadenv(__DIR__.'/../');
 
 define('URL' , getenv('BASE_URL'));    
+
+// DBConection::connenction(getenv('DB_HOST'), getenv('DB_USER'), getenv('DB_PASS'), getenv('DB_NAME'));
 
 //Chamada para definição de vars globais de page
 View::init([
@@ -16,6 +20,6 @@ View::init([
 ]);
 
 MiddlewareQueue::setMap([
-    'AuthMiddleware' => \App\Http\Middleware\AuthMiddleware::class
+    'auth' => \App\Http\Middleware\Auth::class
 ]);
    

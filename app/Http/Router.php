@@ -140,7 +140,9 @@ class Router
                 $name = $param->getName();
                 $arguments[$name] = $route['variables'][$name] ?? '';
             }
-            //Retorna FIla de Middlewares
+            // echo '<pre>'; print_r($arguments); echo'</pre>'; exit;
+
+            //Retorna Fila de Middlewares
             return (new MiddlewareQueue($route['middlewares'], $route['controllers'], $arguments))->next($this->request);
             
 
