@@ -13,24 +13,23 @@ class Queue
     private $middlewares = [];
     private $controller;
     private $controllerArgs = [];
-    private static $map = [];
 
-    ///Middleware para todas rotas
+    
+    ///Mapeamento para todas rotas de Middleware
+    private static $map = [];
     private static $default = [];
 
     public function __construct($middlewares, $controller, $controllerArgs)
     {
 
         $this->middlewares = array_merge(self::$default, $middlewares);
-        // echo '<pre>'; print_r($this->middlewares); echo'</pre>'; exit;
         $this->controller = $controller;
         $this->controllerArgs = $controllerArgs;
     }
 
     public static function setMap($map)
     { 
-        // ! Responsavel por mapear as Middleware
-        //! self por se tratatr de uma classe estatica
+        //self por se tratatr de uma classe estatica
         self::$map = $map;
     }
 
@@ -43,29 +42,33 @@ class Queue
 
     public function next($request)
     {
-
-            // echo '<pre>'; print_r($this); echo'</pre>'; exit;
+        // Caso não haja Middlewares aponta para a rota da Controller
         if(empty($this->middlewares)){
             return call_user_func_array($this->controller, $this->controllerArgs);
         }
-      
-        //Verifica o Array de Middlewares e remove o primeiro
+    
+        //Verifica a FILA de Middlewares e remove a primeira indice
         $middleware = array_shift($this->middlewares);
+
         
-        //Verifica mapeamento para caso não exista no $map
+        //Verifica mapeamento de MIDDLEWARE cadastradas na aplicação
         if(!isset(self::$map[$middleware])){
-            throw new \Exception("Erro ao processar Middleware {$middleware} da requisição", 500);
+            throw new \Exception("Erro ao processar {$middleware} da requisição", 500);
         }
 
-        //Proximo middleware, passando a requisição para proxima função
+
+        //Passando a requisição para proxima função
         $queue = $this;
-        $next = function($request) use ($queue){
+        $next = function($request) use($queue){
             return   $queue->next($request);
         };
-        
-        //Executando o Middleware
-        //PHP retornando exption verificar antes de finalizar.
-        return (new self::$map[$middleware])->handle($request, $next);
+
+        // ! Observação: Dependendo o ambiente de desenvolvimento ou produção é necessario 
+        // ! força a chamada via variavel.
+        $middlewareExec = new self::$map[$middleware];
+
+        //Retornando de forma dinamica o Middleware para execução
+    return $middlewareExec->handle($request, $next);
 
 
     }//NEXT

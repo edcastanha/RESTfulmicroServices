@@ -52,10 +52,6 @@ class Response
             case 'application/json':
                 echo $this->content;
                 exit;
-            
-            default:
-                echo $this->content;
-                exit;
              
         }
     }

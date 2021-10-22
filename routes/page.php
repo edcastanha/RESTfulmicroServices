@@ -5,12 +5,10 @@ use \App\Controllers\Page;
 use \App\Http\Response;
 
 
-$objRoutes->get('/',[ 
-    'middlewares' => [
-        'auth'
-    ],
+$objRoutes->get('/auth',[ 
+
     function(){
-        return new Response(200, Page\Auth::getAuth(), 'text/html' );
+        return new Response(200, Page\Index::getAuth(), 'text/html' );
     }
 ]);
 

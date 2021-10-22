@@ -26,7 +26,7 @@ class DBConection
             $this->connenction = new PDO("mysql:host=localhost;dbname=db_api", "root", "");
             $this->connenction->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            echo "Erro: " . $e->getMessage();
+            return ("Erro: " . $e->getMessage());
         }
     }
    

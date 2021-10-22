@@ -42,6 +42,7 @@ class Router
             }
         }
 
+        //Garantindo que exista MEDDLEWARES (array vazio por padrão caso não haja nenhum)
         $params['middlewares'] = $params['middlewares'] ?? [];
 
         /**
@@ -140,10 +141,9 @@ class Router
                 $name = $param->getName();
                 $arguments[$name] = $route['variables'][$name] ?? '';
             }
-            // echo '<pre>'; print_r($arguments); echo'</pre>'; exit;
 
             //Retorna Fila de Middlewares
-            return (new MiddlewareQueue($route['middlewares'], $route['controllers'], $arguments))->next($this->request);
+            return (new MiddlewareQueue($route['middlewares'],$route['controllers'], $arguments))->next($this->request);
             
 
         } catch (Exception $th) {

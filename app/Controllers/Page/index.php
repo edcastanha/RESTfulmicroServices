@@ -4,7 +4,7 @@ namespace App\Controllers\Page;
 
 use \App\Utils\View;
 
-class Auth
+class Index
 {
 
     public static function getAuth()
