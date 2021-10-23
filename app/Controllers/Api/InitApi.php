@@ -1,11 +1,13 @@
 <?PHP
 
-
 namespace App\Controllers\Api;
 
+use \App\Common\Db\DBConection;
 
-class Api
+class InitApi
 {
+
+    
     public function getDetails($request)
     {
         return [
@@ -17,5 +19,17 @@ class Api
         ];
     }
 
-   
+    protected function getPaginacao($request ,$objPage)
+    {
+        $page = $request->getParam('page');
+        $limit = $request->getParam('limit');
+
+        if ($page && $limit) {
+            $objPage->setPage($page);
+            $objPage->setLimit($limit);
+        }
+
+        return $objPage;
+    }// getPaginacao
+    
 }//end class

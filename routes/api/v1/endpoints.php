@@ -7,6 +7,6 @@ use \App\Controllers\Api;
 $objRoutes->get('/api/v1',[ 
 
     function($request){
-        return new Response(200, Api\Api::getDetails($request));
+        return new Response(200, Api\InitApi::getDetails($request));
     }
 ]);
